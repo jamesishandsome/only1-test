@@ -1,7 +1,8 @@
-import * as fs from 'fs'
+// app/routes/index.tsx
+import * as fs from 'node:fs'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
-import { getServerTime } from '../api'
+import LoginPage from '../pages/login'
 
 const filePath = 'count.txt'
 
@@ -29,14 +30,5 @@ function Home() {
     const router = useRouter()
     const state = Route.useLoaderData()
 
-    return (
-        <button
-            onClick={async () => {
-                const time = await getServerTime()
-                console.log(time)
-            }}
-        >
-            Add 1 to {state}?
-        </button>
-    )
+    return <LoginPage />
 }
