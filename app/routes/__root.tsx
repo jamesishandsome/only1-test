@@ -1,9 +1,12 @@
 // app/routes/__root.tsx
-import { createRootRoute } from '@tanstack/react-router'
+import { createRootRoute, redirect } from '@tanstack/react-router'
 import { Outlet, ScrollRestoration } from '@tanstack/react-router'
 import { Body, Head, Html, Meta, Scripts } from '@tanstack/start'
 import * as React from 'react'
 import appCss from '../styles/main.css?url'
+import { currentUser } from '../api'
+import * as localforage from 'localforage'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 export const Route = createRootRoute({
     meta: () => [
@@ -30,11 +33,15 @@ export const Route = createRootRoute({
     },
 })
 
+const queryClient = new QueryClient()
+
 function RootComponent() {
     return (
-        <RootDocument>
-            <Outlet />
-        </RootDocument>
+        <QueryClientProvider client={queryClient}>
+            <RootDocument>
+                <Outlet />
+            </RootDocument>
+        </QueryClientProvider>
     )
 }
 

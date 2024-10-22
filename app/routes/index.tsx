@@ -27,8 +27,5 @@ export const Route = createFileRoute('/')({
 })
 
 function Home() {
-    const router = useRouter()
-    const state = Route.useLoaderData()
-
-    return <LoginPage />
+    return <div>Home</div>
 }
