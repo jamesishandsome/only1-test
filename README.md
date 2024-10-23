@@ -19,3 +19,6 @@ some notes:
 - The auth part is insane in tanstack router + tanstack start. everything is on server side, it's really hard to use localstorage or cookies to store it, so currently everytime you refresh the page, the user will be logged out. I think it's a good practice to use server side auth, but it's really hard to implement in this task.
 - Not to use useEffect is a tough task because it make it difficult to handle mount event. But I managed to finish the main features.
 - Tanstack Router has some difficulty in vite's HMR. I had a quick fix and might submit a pr after this.
+- I got 3 accounts for you to play. You could also change the data in db directly.
+username: james, password:james
+username: user2, password:james
