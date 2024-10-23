@@ -1,31 +1,47 @@
-// app/routes/index.tsx
-import * as fs from 'node:fs'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+'use client'
+import {
+    createFileRoute,
+    redirect,
+    useNavigate,
+    useRouter,
+} from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
-import LoginPage from '../pages/login'
-
-const filePath = 'count.txt'
-
-async function readCount() {
-    return parseInt(
-        await fs.promises.readFile(filePath, 'utf-8').catch(() => '0')
-    )
-}
-
-const getCount = createServerFn('GET', () => {
-    return readCount()
-})
-
-const updateCount = createServerFn('POST', async (addBy: number) => {
-    const count = await readCount()
-    await fs.promises.writeFile(filePath, `${count + addBy}`)
-})
+import { getCurrentUser } from '@/api'
+import { verifyUser } from '@/utils'
+import localforage from 'localforage'
+import { useLayoutEffect } from 'react'
+import { tokenAtom } from '@/stores'
+import { useAtom } from 'jotai'
+import { useQuery } from '@tanstack/react-query'
+import HomePage from '@/components/home'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const Route = createFileRoute('/')({
-    component: Home,
-    loader: async () => await getCount(),
+    component: () => {
+        return <Home />
+    },
 })
 
 function Home() {
-    return <div>Home</div>
+    const navigate = useNavigate()
+    const [token, setToken] = useAtom(tokenAtom)
+    if (!token) {
+        navigate({ to: '/login' })
+    } else {
+        const { isPending, isError, data, error } = useQuery({
+            queryKey: ['currentUser'],
+            queryFn: async () => {
+                return await getCurrentUser(token)
+            },
+        })
+        // if (data.payload.verfied === false) {
+        //     const navigate = useNavigate()
+        //     navigate({ to: '/login' })
+        // }
+        if (data && data.payload && !data.payload.verified) {
+            alert('Please verify your account first')
+            navigate({ to: '/login' })
+        }
+        return data ? <HomePage /> : null
+    }
 }

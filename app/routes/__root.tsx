@@ -4,9 +4,8 @@ import { Outlet, ScrollRestoration } from '@tanstack/react-router'
 import { Body, Head, Html, Meta, Scripts } from '@tanstack/start'
 import * as React from 'react'
 import appCss from '../styles/main.css?url'
-import { currentUser } from '../api'
-import * as localforage from 'localforage'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import localforage from 'localforage'
 
 export const Route = createRootRoute({
     meta: () => [
@@ -53,7 +52,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </Head>
             <Body>
                 {children}
-                <ScrollRestoration />
                 <Scripts />
             </Body>
         </Html>
